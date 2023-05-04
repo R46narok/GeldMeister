@@ -6,5 +6,7 @@ namespace BankStatements.Application.Common.Repositories;
 
 public interface IBankRepository : IRepository<Bank, Guid>
 {
-    public Task<Bank?> FindByNameAsync(string name, bool track = true);
+    public Task<Bank?> FindByNameAsync(string name, 
+        bool track = true,
+        bool includeScheme = false);
 }

@@ -26,6 +26,7 @@ public static class ConfigureServices
         services.AddScoped<BankStatementsDbContextInitialiser>();
 
         services.AddScoped<IBankRepository, BankRepository>();
+        services.AddScoped<IBankSchemeRepository, BankSchemeRepository>();
 
         return services;
     }

@@ -12,19 +12,17 @@ public class BankRepository : RepositoryBase<Bank, Guid, BankStatementsDbContext
     {
     }
 
-    public async Task<Bank?> FindByNameAsync(string name, bool track)
+    public async Task<Bank?> FindByNameAsync(string name, bool track, bool includeScheme)
     {
-        if (track)
-        {
-            return await Context
-                .Set<Bank>()
-                .AsTracking()
-                .SingleOrDefaultAsync(x => x.Name == name);
-        }
-
-        return await Context
+        var queryable = Context
             .Set<Bank>()
-            .AsNoTracking()
-            .SingleOrDefaultAsync(x => x.Name == name);
+            .AsQueryable();
+
+        queryable = track ? queryable.AsTracking() : queryable.AsNoTracking();
+
+        if (includeScheme)
+            queryable = queryable.Include(x => x.Scheme);
+
+        return await queryable.SingleOrDefaultAsync(x => x.Name == name);
     }
 }

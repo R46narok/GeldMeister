@@ -33,7 +33,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UsePersistence<BankStatementsDbContext>();
 app.UseJwtAuthentication();
 app.UseAuthorization();
 
