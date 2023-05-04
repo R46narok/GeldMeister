@@ -6,4 +6,19 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <Folder Include="Files" />
+      <Folder Include="Persistence\Migrations" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.5" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\Common\GeldMeister.Common.Infrastructure\GeldMeister.Common.Infrastructure.csproj" />
+      <ProjectReference Include="..\BankStatements.Application\BankStatements.Application.csproj" />
+      <ProjectReference Include="..\BankStatements.Domain\BankStatements.Domain.csproj" />
+    </ItemGroup>
+
 </Project>

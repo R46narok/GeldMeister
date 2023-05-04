@@ -6,4 +6,16 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <Folder Include="BankSchemeProperties" />
+      <Folder Include="BankSchemes" />
+      <Folder Include="Banks\EventHandlers" />
+      <Folder Include="Users" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\Common\GeldMeister.Common.Application\GeldMeister.Common.Application.csproj" />
+      <ProjectReference Include="..\BankStatements.Domain\BankStatements.Domain.csproj" />
+    </ItemGroup>
+
 </Project>

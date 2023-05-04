@@ -6,4 +6,5 @@ public abstract class AuditableEntityBase : EntityBase
 
     public DateTime? LastModifiedOn { get; set; }
 
+
 }
