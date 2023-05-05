@@ -1,10 +1,12 @@
-﻿using BankStatements.Application.Common.Interfaces;
+﻿using BankStatements.Application.Common.Dto;
+using BankStatements.Application.Common.Interfaces;
 using BankStatements.Application.Common.Repositories;
 using BankStatements.Infrastructure.Files;
 using BankStatements.Infrastructure.Persistence;
 using BankStatements.Infrastructure.Repositories;
 using BankStatements.Infrastructure.Services;
 using GeldMeister.Common.Application.Interfaces;
+using GeldMeister.Common.Infrastructure.Extensions;
 using GeldMeister.Common.Infrastructure.Interceptors;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -26,6 +28,7 @@ public static class ConfigureServices
                 builder => builder.MigrationsAssembly(typeof(BankStatementsDbContext).Assembly.FullName)));
 
         services.AddScoped<BankStatementsDbContextInitialiser>();
+        services.AddEventHandlers(typeof(BankDto).Assembly);
 
         services.AddScoped<IBankRepository, BankRepository>();
         services.AddScoped<IBankSchemeRepository, BankSchemeRepository>();

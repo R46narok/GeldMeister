@@ -6,6 +6,7 @@ using BankStatements.Infrastructure.Persistence;
 using GeldMeister.Common.Application.Extensions;
 using GeldMeister.Common.Application.MessageBrokers;
 using GeldMeister.Common.Application.Security;
+using GeldMeister.Common.Infrastructure.Extensions;
 using GeldMeister.Common.Infrastructure.MessageBrokers;
 using RabbitMQ.Client;
 
@@ -40,6 +41,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseJwtAuthentication();
 app.UseAuthorization();
+app.UseEventHandlers();
 
 app.MapControllers();
 

@@ -9,7 +9,7 @@ namespace GeldMeister.Common.Infrastructure.Extensions;
 
 public static class MessageBrokerExtensions
 {
-    private static List<Type> _registered = new();
+    private static readonly List<Type> _registered = new();
 
     public static void UseEventHandlers(this WebApplication app)
     {

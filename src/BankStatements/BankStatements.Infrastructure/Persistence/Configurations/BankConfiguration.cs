@@ -8,7 +8,8 @@ public class BankConfiguration : IEntityTypeConfiguration<Bank>
 {
     public void Configure(EntityTypeBuilder<Bank> builder)
     {
-        builder.Property(b => b.Name)
+        builder
+            .Property(b => b.Name)
             .HasMaxLength(200)
             .IsRequired();
 
