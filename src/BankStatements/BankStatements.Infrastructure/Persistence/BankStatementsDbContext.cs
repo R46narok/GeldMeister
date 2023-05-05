@@ -27,6 +27,7 @@ public class BankStatementsDbContext : DbContext
     public DbSet<Bank> Banks => Set<Bank>();
     public DbSet<BankScheme> BankSchemes => Set<BankScheme>();
     public DbSet<BankSchemeProperty> BankSchemeProperties => Set<BankSchemeProperty>();
+    public DbSet<BankStatement> BankStatements => Set<BankStatement>();
     public DbSet<User> Users => Set<User>();
 
     protected override void OnModelCreating(ModelBuilder builder)

@@ -1,3 +1,4 @@
+using BankStatements.Api.Security;
 using BankStatements.Application.Common.Repositories;
 using BankStatements.Domain.UserAggregate;
 using BankStatements.Infrastructure;
@@ -19,7 +20,7 @@ builder.Services.AddControllers();
 builder.Services.AddInfrastructureServices(builder.Configuration);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.ConfigureSwagger();
 
 builder.Services.AddMediatorAndFluentValidation(new[] {typeof(IBankRepository).Assembly});
 builder.AddJwtAuthentication();
@@ -29,7 +30,11 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+        options.RoutePrefix = "swagger";
+    });
 }
 
 app.UseHttpsRedirection();

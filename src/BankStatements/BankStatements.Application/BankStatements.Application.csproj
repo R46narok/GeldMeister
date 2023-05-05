@@ -11,6 +11,7 @@
       <Folder Include="BankSchemes\EventHandlers" />
       <Folder Include="BankSchemes\Queries" />
       <Folder Include="Banks\EventHandlers" />
+      <Folder Include="Common\Models" />
       <Folder Include="Users" />
     </ItemGroup>
 

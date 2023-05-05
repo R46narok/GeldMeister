@@ -1,4 +1,6 @@
-﻿using BankStatements.Application.Common.Repositories;
+﻿using BankStatements.Application.Common.Interfaces;
+using BankStatements.Application.Common.Repositories;
+using BankStatements.Infrastructure.Files;
 using BankStatements.Infrastructure.Persistence;
 using BankStatements.Infrastructure.Repositories;
 using BankStatements.Infrastructure.Services;
@@ -28,6 +30,9 @@ public static class ConfigureServices
         services.AddScoped<IBankRepository, BankRepository>();
         services.AddScoped<IBankSchemeRepository, BankSchemeRepository>();
         services.AddScoped<IBankSchemePropertyRepository, BankSchemePropertyRepository>();
+        services.AddScoped<IBankStatementRepository, BankStatementRepository>();
+        
+        services.AddSingleton<IBankStatementParserFactory, BankStatementParserFactory>();
 
         return services;
     }
