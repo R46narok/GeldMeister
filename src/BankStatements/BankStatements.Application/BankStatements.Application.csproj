@@ -7,9 +7,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="BankSchemeProperties" />
+      <Folder Include="BankSchemeProperties\EventHandlers" />
       <Folder Include="BankSchemes\EventHandlers" />
-      <Folder Include="BankSchemes\Queries\GetByName" />
+      <Folder Include="BankSchemes\Queries" />
       <Folder Include="Banks\EventHandlers" />
       <Folder Include="Users" />
     </ItemGroup>

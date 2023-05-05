@@ -9,11 +9,8 @@ namespace BankStatements.Application.BankSchemes.Commands.Create;
 
 public record CreateBankSchemeCommandResponse(Guid Id);
 
-public class CreateBankSchemeCommand : IRequest<ErrorOr<CreateBankSchemeCommandResponse>>
-{
-    public string BankName { get; set; }
-    public FileType FileType { get; set; }
-}
+public record CreateBankSchemeCommand(string BankName, FileType FileType) 
+    : IRequest<ErrorOr<CreateBankSchemeCommandResponse>>;
 
 public class CreateBankSchemeCommandHandler 
     : IRequestHandler<CreateBankSchemeCommand, ErrorOr<CreateBankSchemeCommandResponse>>

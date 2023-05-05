@@ -8,10 +8,7 @@ namespace BankStatements.Application.Banks.Commands.Create;
 
 public record CreateBankCommandResponse(Guid Id);
 
-public class CreateBankCommand : IRequest<ErrorOr<CreateBankCommandResponse>>
-{
-    public string Name { get; set; }
-}
+public record CreateBankCommand(string Name) : IRequest<ErrorOr<CreateBankCommandResponse>>;
 
 public class CreateBankCommandHandler : IRequestHandler<CreateBankCommand, ErrorOr<CreateBankCommandResponse>>
 {

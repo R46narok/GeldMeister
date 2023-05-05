@@ -10,6 +10,7 @@ public class BankScheme : AuditableEntityBase
     public Bank Bank { get; private set; }
     public Guid BankId { get; private set; }
     public FileType FileType { get; private set; }
+    // public bool HasHeader { get; private set; }
 
     public IReadOnlySet<BankSchemeProperty> Properties => _properties;
 

@@ -22,7 +22,11 @@ public class GetBankByNameQueryHandler : IRequestHandler<GetBankByNameQuery, Err
 
     public async Task<ErrorOr<BankDto>> Handle(GetBankByNameQuery request, CancellationToken cancellationToken)
     {
-        var bank = await _repository.FindByNameAsync(request.Name, track: false, includeScheme: true);
+        var bank = await _repository.FindByNameAsync(request.Name,
+            track: false, 
+            includeScheme: true,
+            includeSchemeProperties: true);
+        
         var dto = _mapper.Map<BankDto>(bank);
         return dto;
     }

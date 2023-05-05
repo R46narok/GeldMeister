@@ -1,4 +1,5 @@
 ﻿using BankStatements.Application.Banks.Commands.Create;
+using BankStatements.Application.Banks.Queries.GetAll;
 using BankStatements.Application.Banks.Queries.GetByName;
 using GeldMeister.Common.Infrastructure.Web;
 using MediatR;
@@ -22,9 +23,17 @@ public class BankController : ApiController
         var response = await _mediator.Send(command);
         return response.Match(Ok, Problem);
     }
-    
+
     [HttpGet]
-    public async Task<IActionResult> GetBankByNameAsync([FromQuery] string name)
+    public async Task<IActionResult> GetAllBanksAsync()
+    {
+        var query = new GetAllBanksQuery();
+        var response = await _mediator.Send(query);
+        return response.Match(Ok, Problem);
+    }
+
+    [HttpGet("{name}")]
+    public async Task<IActionResult> GetBankByNameAsync(string name)
     {
         var query = new GetBankByNameQuery(name);
         var response = await _mediator.Send(query);

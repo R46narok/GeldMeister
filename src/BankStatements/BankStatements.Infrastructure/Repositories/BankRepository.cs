@@ -12,16 +12,30 @@ public class BankRepository : RepositoryBase<Bank, Guid, BankStatementsDbContext
     {
     }
 
-    public async Task<Bank?> FindByNameAsync(string name, bool track, bool includeScheme)
+    public override List<Bank> GetAll()
+    {
+        return Context
+            .Set<Bank>()
+            .Include(x => x.Scheme)
+            .ThenInclude(x => x.Properties)
+            .ToList();
+    }
+
+    public async Task<Bank?> FindByNameAsync(string name, bool track, bool includeScheme, bool includeSchemeProperties)
     {
         var queryable = Context
             .Set<Bank>()
             .AsQueryable();
 
-        queryable = track ? queryable.AsTracking() : queryable.AsNoTracking();
-
-        if (includeScheme)
-            queryable = queryable.Include(x => x.Scheme);
+        queryable = includeScheme switch
+        {
+            true when includeSchemeProperties => queryable
+                .Include(x => x.Scheme)
+                .ThenInclude(x => x.Properties),
+            true => queryable
+                .Include(x => x.Scheme),
+            _ => track ? queryable.AsTracking() : queryable.AsNoTracking()
+        };
 
         return await queryable.SingleOrDefaultAsync(x => x.Name == name);
     }

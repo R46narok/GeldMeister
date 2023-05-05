@@ -27,6 +27,7 @@ public static class ConfigureServices
 
         services.AddScoped<IBankRepository, BankRepository>();
         services.AddScoped<IBankSchemeRepository, BankSchemeRepository>();
+        services.AddScoped<IBankSchemePropertyRepository, BankSchemePropertyRepository>();
 
         return services;
     }

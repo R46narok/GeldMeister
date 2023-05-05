@@ -8,5 +8,6 @@ public interface IBankRepository : IRepository<Bank, Guid>
 {
     public Task<Bank?> FindByNameAsync(string name, 
         bool track = true,
-        bool includeScheme = false);
+        bool includeScheme = false,
+        bool includeSchemeProperties = false);
 }
