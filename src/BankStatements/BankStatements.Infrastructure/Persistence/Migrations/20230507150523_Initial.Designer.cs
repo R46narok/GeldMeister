@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BankStatements.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(BankStatementsDbContext))]
-    [Migration("20230504081849_Initial")]
+    [Migration("20230507150523_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -86,14 +86,48 @@ namespace BankStatements.Infrastructure.Persistence.Migrations
                     b.Property<DateTime?>("LastModifiedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<Guid>("SchemeId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("SchemeId");
 
                     b.ToTable("BankSchemeProperties");
+                });
+
+            modelBuilder.Entity("BankStatements.Domain.BankAggregate.BankStatement", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("BankId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("LastModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BankId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("BankStatements");
                 });
 
             modelBuilder.Entity("BankStatements.Domain.UserAggregate.User", b =>
@@ -139,6 +173,21 @@ namespace BankStatements.Infrastructure.Persistence.Migrations
                     b.Navigation("Scheme");
                 });
 
+            modelBuilder.Entity("BankStatements.Domain.BankAggregate.BankStatement", b =>
+                {
+                    b.HasOne("BankStatements.Domain.BankAggregate.Bank", "Bank")
+                        .WithMany()
+                        .HasForeignKey("BankId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BankStatements.Domain.UserAggregate.User", null)
+                        .WithMany("BankStatements")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Bank");
+                });
+
             modelBuilder.Entity("BankStatements.Domain.BankAggregate.Bank", b =>
                 {
                     b.Navigation("Scheme");
@@ -147,6 +196,11 @@ namespace BankStatements.Infrastructure.Persistence.Migrations
             modelBuilder.Entity("BankStatements.Domain.BankAggregate.BankScheme", b =>
                 {
                     b.Navigation("Properties");
+                });
+
+            modelBuilder.Entity("BankStatements.Domain.UserAggregate.User", b =>
+                {
+                    b.Navigation("BankStatements");
                 });
 #pragma warning restore 612, 618
         }

@@ -9,5 +9,5 @@ public interface IBankStatementParser
     /// </summary>
     /// <param name="stream">The actual contents of the file, coming from memory, HTTP form, etc.</param>
     /// <param name="scheme">The scheme to be used for parsing, properties must be included</param>
-    public Task Parse(StreamReader stream, BankScheme scheme);
+    public Task<List<dynamic>> Parse(StreamReader stream, BankScheme scheme);
 }

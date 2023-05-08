@@ -34,8 +34,10 @@ public static class ConfigureServices
         services.AddScoped<IBankSchemeRepository, BankSchemeRepository>();
         services.AddScoped<IBankSchemePropertyRepository, BankSchemePropertyRepository>();
         services.AddScoped<IBankStatementRepository, BankStatementRepository>();
+        services.AddScoped<IDynamicTransactionRepository, DynamicTransactionRepository>();
         
         services.AddSingleton<IBankStatementParserFactory, BankStatementParserFactory>();
+        services.AddSingleton<ISqlConnectionFactory, DapperSqlConnectionFactory>();
 
         return services;
     }

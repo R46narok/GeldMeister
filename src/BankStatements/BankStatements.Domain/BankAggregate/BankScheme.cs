@@ -7,7 +7,7 @@ public class BankScheme : AuditableEntityBase
 {
     private readonly HashSet<BankSchemeProperty> _properties = new();
 
-    public Bank Bank { get; private set; }
+    public Bank Bank { get; private init; }
     public Guid BankId { get; private set; }
     public FileType FileType { get; private set; }
     // public bool HasHeader { get; private set; }

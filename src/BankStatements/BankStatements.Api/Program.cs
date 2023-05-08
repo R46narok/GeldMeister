@@ -1,3 +1,4 @@
+using System.Data;
 using BankStatements.Api.Security;
 using BankStatements.Application.Common.Repositories;
 using BankStatements.Domain.UserAggregate;
@@ -8,6 +9,7 @@ using GeldMeister.Common.Application.MessageBrokers;
 using GeldMeister.Common.Application.Security;
 using GeldMeister.Common.Infrastructure.Extensions;
 using GeldMeister.Common.Infrastructure.MessageBrokers;
+using Microsoft.EntityFrameworkCore;
 using RabbitMQ.Client;
 
 var factory = new ConnectionFactory() {HostName = "localhost"};

@@ -7,7 +7,7 @@ public class User : AuditableEntityBase, IAggregateRoot
 {
     private readonly HashSet<BankStatement> _bankStatements = new();
     public string ExternalId { get; private init; } = string.Empty;
-    public IReadOnlySet<BankStatement> BankStatements => _bankStatements;
+    // public IReadOnlySet<BankStatement> BankStatements => _bankStatements;
 
     private User()
     {

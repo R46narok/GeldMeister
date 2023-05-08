@@ -2,9 +2,5 @@
 
 public enum DataType
 {
-    None,
-    Int8, Int16, Int32, Int64,
-    Float16, Float32,
-    Double,
-    String
+    None, Int, Decimal, Double, DateTime, String
 }

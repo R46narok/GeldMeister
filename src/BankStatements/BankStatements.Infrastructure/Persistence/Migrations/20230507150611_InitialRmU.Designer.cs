@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BankStatements.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(BankStatementsDbContext))]
-    [Migration("20230505064204_SchemeProperties")]
-    partial class SchemeProperties
+    [Migration("20230507150611_InitialRmU")]
+    partial class InitialRmU
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -103,6 +103,28 @@ namespace BankStatements.Infrastructure.Persistence.Migrations
                     b.ToTable("BankSchemeProperties");
                 });
 
+            modelBuilder.Entity("BankStatements.Domain.BankAggregate.BankStatement", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("BankId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("LastModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BankId");
+
+                    b.ToTable("BankStatements");
+                });
+
             modelBuilder.Entity("BankStatements.Domain.UserAggregate.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -144,6 +166,17 @@ namespace BankStatements.Infrastructure.Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("Scheme");
+                });
+
+            modelBuilder.Entity("BankStatements.Domain.BankAggregate.BankStatement", b =>
+                {
+                    b.HasOne("BankStatements.Domain.BankAggregate.Bank", "Bank")
+                        .WithMany()
+                        .HasForeignKey("BankId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Bank");
                 });
 
             modelBuilder.Entity("BankStatements.Domain.BankAggregate.Bank", b =>

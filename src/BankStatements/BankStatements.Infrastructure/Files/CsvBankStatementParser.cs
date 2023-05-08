@@ -3,7 +3,9 @@ using System.Reflection;
 using System.Reflection.Emit;
 using BankStatements.Application.Common.Interfaces;
 using BankStatements.Domain.BankAggregate;
+using BankStatements.Domain.BankAggregate.Enums;
 using CsvHelper;
+using CsvHelper.Configuration;
 
 namespace BankStatements.Infrastructure.Files;
 
@@ -13,35 +15,35 @@ public class CsvBankStatementParser : IBankStatementParser
     {
     }
 
-    private void Init()
+    public async Task<List<dynamic>> Parse(StreamReader stream, BankScheme scheme)
     {
-        var assemblyName = "newAssembly";
-        var moduleName = "newModule";
-        var typeName = "typeName";
-        var assemblyBuilder = AssemblyBuilder.DefineDynamicAssembly(new AssemblyName(assemblyName), AssemblyBuilderAccess.RunAndCollect);
-        var moduleBuilder = assemblyBuilder.DefineDynamicModule(moduleName);
-
-        var typeBuilder = moduleBuilder.DefineType(typeName);
-        // typeBuilder.DefineProperty("sample", 
-        //     PropertyAttributes.None, CallingConventions.Standard)
-    }
-    
-    public async Task Parse(StreamReader stream, BankScheme scheme)
-    {
-        Init();
-        
-        var properties = scheme.Properties;
+        var properties = scheme
+            .Properties
+            .ToList();
         using var csv = new CsvReader(stream, CultureInfo.InvariantCulture);
 
+        // await csv.ReadAsync(); // Header
+        var result = new List<dynamic>();
         while (await csv.ReadAsync())
         {
-            var record = csv.GetRecord<dynamic>();
-            foreach (var prop in properties)
-            {
-                
-            }
+            var record = csv.GetRecord<dynamic>()!;
+            result.Add(record);
         }
 
-        csv.ReadHeader();
+        return result;
+    }
+
+    private static Type DataTypeToNet(DataType dataType)
+    {
+        return dataType switch
+        {
+            // DataType.Int => typeof(int),
+            // DataType.Decimal => typeof(decimal),
+            // DataType.Double => typeof(double),
+            // DataType.DateTime => typeof(DateTime),
+            // DataType.String => typeof(string),
+            // _ => throw new ArgumentOutOfRangeException(nameof(dataType), dataType, null)
+            _ => typeof(string)
+        };
     }
 }
