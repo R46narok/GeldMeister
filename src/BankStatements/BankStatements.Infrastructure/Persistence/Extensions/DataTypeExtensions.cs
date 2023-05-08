@@ -1,6 +1,6 @@
 using BankStatements.Domain.BankAggregate.Enums;
 
-namespace BankStatements.Infrastructure.Repositories.Extensions;
+namespace BankStatements.Infrastructure.Persistence.Extensions;
 
 public static class DataTypeExtensions
 {
@@ -13,6 +13,7 @@ public static class DataTypeExtensions
             DataType.Double => "FLOAT",
             DataType.DateTime => "DATETIME2",
             DataType.String => "NVARCHAR(MAX)",
+            DataType.UniqueIdentifier => "uniqueidentifier",
             _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
         };
     }

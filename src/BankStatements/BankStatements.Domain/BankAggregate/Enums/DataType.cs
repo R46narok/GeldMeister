@@ -2,5 +2,5 @@
 
 public enum DataType
 {
-    None, Int, Decimal, Double, DateTime, String
+    None, Int, Decimal, Double, DateTime, String, UniqueIdentifier
 }

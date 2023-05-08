@@ -28,6 +28,8 @@ public class Bank : AuditableEntityBase, IAggregateRoot
 
         return bank;
     }
+
+    
     
     public void ChangeName(string name)
     {

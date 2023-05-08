@@ -26,7 +26,8 @@ public class CreateBankStatementCommandHandler
         IBankStatementParserFactory factory,
         IBankSchemeRepository repository,
         IDynamicTransactionRepository transactionRepository,
-        IBankStatementRepository statementRepository)
+        IBankStatementRepository statementRepository
+    )
     {
         _factory = factory;
         _repository = repository;
@@ -44,7 +45,27 @@ public class CreateBankStatementCommandHandler
             await _transactionRepository.CreateTransactionType(name, scheme);
 
         var guid = await _statementRepository.CreateAsync(BankStatement.Create(scheme.Bank, null));
-        
+
+        await CreateTransactionsFromFile(request.File, scheme, guid);
+
         return new CreateBankStatementCommandResponse(guid);
+    }
+
+    private async Task CreateTransactionsFromFile(
+        IFormFile file,
+        BankScheme scheme,
+        Guid statementId)
+    {
+        var parser = _factory.Create(scheme.FileType);
+        await using var stream = file.OpenReadStream();
+        var transactions = (await parser.Parse(new StreamReader(stream), scheme))
+            .Select(x => x as IDictionary<string, object>)
+            .ToList();
+
+        foreach (var transaction in transactions)
+        {
+            await _transactionRepository
+                .CreateTransaction(scheme.Bank.Name, scheme, statementId, transaction!);
+        }
     }
 }

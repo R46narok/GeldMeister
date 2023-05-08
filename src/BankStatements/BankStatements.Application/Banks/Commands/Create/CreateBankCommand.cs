@@ -12,8 +12,8 @@ public record CreateBankCommand(string Name) : IRequest<ErrorOr<CreateBankComman
 
 public class CreateBankCommandHandler : IRequestHandler<CreateBankCommand, ErrorOr<CreateBankCommandResponse>>
 {
-    private IBankRepository _repository;
-    private IMapper _mapper;
+    private readonly IBankRepository _repository;
+    private readonly IMapper _mapper;
 
     public CreateBankCommandHandler(IBankRepository repository, IMapper mapper)
     {

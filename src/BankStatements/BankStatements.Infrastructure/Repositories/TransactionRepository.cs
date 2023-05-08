@@ -1,10 +1,11 @@
 using System.Data;
 using System.Text;
+using BankStatements.Application.Common.Builders;
 using BankStatements.Application.Common.Interfaces;
 using BankStatements.Domain.BankAggregate;
+using BankStatements.Domain.BankAggregate.Enums;
 using BankStatements.Infrastructure.Helpers;
 using BankStatements.Infrastructure.Persistence;
-using BankStatements.Infrastructure.Repositories.Extensions;
 using Dapper;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,10 +13,12 @@ namespace BankStatements.Infrastructure.Repositories;
 
 public class DynamicTransactionRepository : IDynamicTransactionRepository
 {
+    private readonly ITransactionQueryBuilder _builder;
     private readonly IDbConnection _connection;
 
-    public DynamicTransactionRepository(ISqlConnectionFactory connectionFactory)
+    public DynamicTransactionRepository(ISqlConnectionFactory connectionFactory, ITransactionQueryBuilder builder)
     {
+        _builder = builder;
         _connection = connectionFactory.Create();
     }
 
@@ -28,7 +31,7 @@ public class DynamicTransactionRepository : IDynamicTransactionRepository
 
         var parameters = new
         {
-            Name = $"{name}TransactionType"
+            Name = $"{name}"
         };
 
         return await _connection.QuerySingleOrDefaultAsync<int>(query, parameters) > 0;
@@ -39,24 +42,20 @@ public class DynamicTransactionRepository : IDynamicTransactionRepository
     {
         var properties = scheme.Properties;
 
-        var queryBuilder = new StringBuilder();
-        queryBuilder.Append(@$"CREATE TABLE [{name}TransactionType](
-                              Id INT PRIMARY KEY IDENTITY(1,1),
-                              StatementId uniqueidentifier NOT NULL,
-                              CONSTRAINT [FK_@Name_BankStatements] FOREIGN KEY (StatementId) REFERENCES BankStatements(Id),");
+        var table = _builder
+            .BeginTableDefinition(name)
+            .DefineColumn("StatementId", DataType.UniqueIdentifier, notNull: true);
 
         foreach (var prop in properties)
-        {
-            queryBuilder.Append(@$"{prop.Name.ToTitleCaseTrimmed()} {prop.Type.ToMssqlType()} NOT NULL,");
-        }
+            table.DefineColumn(prop.Name.ToTitleCaseTrimmed(), prop.Type, notNull: true);
 
-        queryBuilder.Remove(queryBuilder.Length - 1, 1);
-        queryBuilder.Append(")");
-
-        await _connection.QueryAsync(queryBuilder.ToString());
+        table.AddForeignKeyConstraint("BankStatements", "StatementId");
+        table.EndTableDefinition();
+        
+        await _connection.QueryAsync(_builder.Build());
     }
 
-    public async Task CreateTransaction(string name, BankScheme scheme, Guid statementId, Dictionary<string, object> parameters)
+    public async Task CreateTransaction(string name, BankScheme scheme, Guid statementId, IDictionary<string, object> parameters)
     {
         var parametersTitleCase = new Dictionary<string, object>();
         foreach (var pair in parameters)
@@ -65,7 +64,7 @@ public class DynamicTransactionRepository : IDynamicTransactionRepository
         var properties = scheme.Properties;
         var queryBuilder = new StringBuilder();
 
-        queryBuilder.Append($@"INSERT INTO [{name}TransactionType](");
+        queryBuilder.Append($@"INSERT INTO [{name}](");
         foreach (var prop in properties)
             queryBuilder.Append($"[{prop.Name.ToTitleCaseTrimmed()}],");
         queryBuilder.Append("[StatementId])");
@@ -77,5 +76,31 @@ public class DynamicTransactionRepository : IDynamicTransactionRepository
         queryBuilder.Append(@$"'{statementId}')");
         
         await _connection.QueryAsync(queryBuilder.ToString(), parametersTitleCase);
+    }
+
+    public async Task<List<dynamic>> GetTransactionsByStatementId(string name, Guid statementId)
+    { 
+        string query = @$"SELECT * FROM [{name}] WHERE StatementId = '{statementId}'";
+
+        return (await _connection.QueryAsync(query)).ToList();
+    }
+
+    public async Task<List<dynamic>> GetTransactionsByStatementIdWithPagination(string name, Guid statementId, int pageIndex, int pageSize)
+    {
+        var query = $@"SELECT * FROM [{name}] 
+                          WHERE StatementId = @StatementId
+                          ORDER BY Id
+                          OFFSET @Offset ROWS
+                          FETCH NEXT @PageSize ROWS ONLY";
+        
+        var parameters = new
+        {
+            Name = name, 
+            StatementId = statementId,
+            Offset = pageIndex * pageSize,
+            PageSize = pageSize,
+        };
+
+        return (await _connection.QueryAsync(query, parameters)).ToList();
     }
 }

@@ -7,5 +7,10 @@ public interface IDynamicTransactionRepository
     public Task<bool> IsTransactionTypeCreated(string name);
     public Task CreateTransactionType(string name, BankScheme scheme);
 
-    public Task CreateTransaction(string name, BankScheme scheme, Guid statementId, Dictionary<string, object> parameters);
+    public Task CreateTransaction(string name, BankScheme scheme, Guid statementId, IDictionary<string, object> parameters);
+
+
+    public Task<List<dynamic>> GetTransactionsByStatementId(string name, Guid statementId);
+    public Task<List<dynamic>> GetTransactionsByStatementIdWithPagination(
+        string name, Guid statementId, int pageIndex, int pageSize);
 }

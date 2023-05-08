@@ -1,8 +1,10 @@
-﻿using BankStatements.Application.Common.Dto;
+﻿using BankStatements.Application.Common.Builders;
+using BankStatements.Application.Common.Dto;
 using BankStatements.Application.Common.Interfaces;
 using BankStatements.Application.Common.Repositories;
 using BankStatements.Infrastructure.Files;
 using BankStatements.Infrastructure.Persistence;
+using BankStatements.Infrastructure.Persistence.Builders;
 using BankStatements.Infrastructure.Repositories;
 using BankStatements.Infrastructure.Services;
 using GeldMeister.Common.Application.Interfaces;
@@ -35,9 +37,11 @@ public static class ConfigureServices
         services.AddScoped<IBankSchemePropertyRepository, BankSchemePropertyRepository>();
         services.AddScoped<IBankStatementRepository, BankStatementRepository>();
         services.AddScoped<IDynamicTransactionRepository, DynamicTransactionRepository>();
+        services.AddTransient<ITransactionQueryBuilder, MssqlTransactionQueryBuilder>();
         
         services.AddSingleton<IBankStatementParserFactory, BankStatementParserFactory>();
         services.AddSingleton<ISqlConnectionFactory, DapperSqlConnectionFactory>();
+        
 
         return services;
     }

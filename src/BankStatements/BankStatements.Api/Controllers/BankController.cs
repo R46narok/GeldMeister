@@ -1,4 +1,6 @@
 ﻿using BankStatements.Application.Banks.Commands.Create;
+using BankStatements.Application.Banks.Commands.Delete;
+using BankStatements.Application.Banks.Commands.Update;
 using BankStatements.Application.Banks.Queries.GetAll;
 using BankStatements.Application.Banks.Queries.GetByName;
 using GeldMeister.Common.Infrastructure.Web;
@@ -17,13 +19,6 @@ public class BankController : ApiController
         _mediator = mediator;
     }
 
-    [HttpPost]
-    public async Task<IActionResult> CreateBankAsync([FromBody] CreateBankCommand command)
-    {
-        var response = await _mediator.Send(command);
-        return response.Match(Ok, Problem);
-    }
-
     [HttpGet]
     public async Task<IActionResult> GetAllBanksAsync()
     {
@@ -32,11 +27,33 @@ public class BankController : ApiController
         return response.Match(Ok, Problem);
     }
 
-    [HttpGet("{name}")]
-    public async Task<IActionResult> GetBankByNameAsync(string name)
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetBankByNameAsync(Guid id)
     {
-        var query = new GetBankByNameQuery(name);
+        var query = new GetBankByIdQuery(id);
         var response = await _mediator.Send(query);
+        return response.Match(Ok, Problem);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> CreateBankAsync([FromBody] CreateBankCommand command)
+    {
+        var response = await _mediator.Send(command);
+        return response.Match(Ok, Problem);
+    }
+
+    [HttpPatch]
+    public async Task<IActionResult> UpdateBankAsync([FromBody] UpdateBankCommand command)
+    {
+        var response = await _mediator.Send(command);
+        return response.Match(Ok, Problem);
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteBankAsync(Guid id)
+    {
+        var command = new DeleteBankCommand(id);
+        var response = await _mediator.Send(command);
         return response.Match(Ok, Problem);
     }
 }
