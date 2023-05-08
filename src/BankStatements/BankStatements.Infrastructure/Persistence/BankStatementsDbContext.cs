@@ -1,6 +1,5 @@
 ﻿using System.Reflection;
 using BankStatements.Domain.BankAggregate;
-using BankStatements.Domain.UserAggregate;
 using GeldMeister.Common.Infrastructure.Extensions;
 using GeldMeister.Common.Infrastructure.Interceptors;
 using MediatR;
@@ -28,7 +27,6 @@ public class BankStatementsDbContext : DbContext
     public DbSet<BankScheme> BankSchemes => Set<BankScheme>();
     public DbSet<BankSchemeProperty> BankSchemeProperties => Set<BankSchemeProperty>();
     public DbSet<BankStatement> BankStatements => Set<BankStatement>();
-    public DbSet<User> Users => Set<User>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

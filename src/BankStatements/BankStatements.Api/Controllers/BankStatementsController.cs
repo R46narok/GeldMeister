@@ -28,6 +28,7 @@ public class BankStatementsController : ApiController
     }
 
     [HttpGet("{id}")]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     public async Task<IActionResult> GetBankStatementByIdAsync(string id, [FromQuery] int pageIndex, [FromQuery] int pageSize)
     {
         var query = new GetBankStatementByIdWithPaginationQuery(new Guid(id), pageIndex, pageSize);

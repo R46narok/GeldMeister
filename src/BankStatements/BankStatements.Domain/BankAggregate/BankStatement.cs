@@ -1,12 +1,10 @@
-﻿using BankStatements.Domain.UserAggregate;
-
+﻿
 namespace BankStatements.Domain.BankAggregate;
 
 public class BankStatement : AuditableEntityBase
 {
     public Bank Bank { get; private init; } = null!;
-    // public User User { get; private init; } = null!;
-
+    public Guid UserId { get; private init; } 
     // public Guid TransactionId { get; private init; } 
 
     private BankStatement()
@@ -14,12 +12,12 @@ public class BankStatement : AuditableEntityBase
         
     }
 
-    public static BankStatement? Create(Bank bank, User user)
+    public static BankStatement? Create(Bank bank, Guid userId)
     {
         var statement = new BankStatement
         {
             Bank = bank,
-            // User = user
+            UserId = userId
         };
 
         

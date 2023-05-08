@@ -50,8 +50,11 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Error
 
         if (identityResult.Succeeded)
         {
+            var id = await _userManager.GetUserIdAsync(user);
+            
             await _userManager.AddClaimsAsync(user, new []
             {
+                new Claim(ClaimTypes.NameIdentifier, id),
                 new Claim(ClaimTypes.Name, user.UserName),
                 new Claim(ClaimTypes.Role, "User")
             });

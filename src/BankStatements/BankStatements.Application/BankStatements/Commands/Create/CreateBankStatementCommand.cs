@@ -21,18 +21,21 @@ public class CreateBankStatementCommandHandler
     private readonly IBankSchemeRepository _repository;
     private readonly IDynamicTransactionRepository _transactionRepository;
     private readonly IBankStatementRepository _statementRepository;
+    private readonly ICurrentUserService _userService;
 
     public CreateBankStatementCommandHandler(
         IBankStatementParserFactory factory,
         IBankSchemeRepository repository,
         IDynamicTransactionRepository transactionRepository,
-        IBankStatementRepository statementRepository
+        IBankStatementRepository statementRepository,
+        ICurrentUserService userService
     )
     {
         _factory = factory;
         _repository = repository;
         _transactionRepository = transactionRepository;
         _statementRepository = statementRepository;
+        _userService = userService;
     }
 
     public async Task<ErrorOr<CreateBankStatementCommandResponse>> Handle(CreateBankStatementCommand request,
@@ -44,7 +47,7 @@ public class CreateBankStatementCommandHandler
         if (!await _transactionRepository.IsTransactionTypeCreated(name))
             await _transactionRepository.CreateTransactionType(name, scheme);
 
-        var guid = await _statementRepository.CreateAsync(BankStatement.Create(scheme.Bank, null));
+        var guid = await _statementRepository.CreateAsync(BankStatement.Create(scheme.Bank, _userService.UserId)!);
 
         await CreateTransactionsFromFile(request.File, scheme, guid);
 

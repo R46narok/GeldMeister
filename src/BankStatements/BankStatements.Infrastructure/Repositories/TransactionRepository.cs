@@ -55,6 +55,12 @@ public class DynamicTransactionRepository : IDynamicTransactionRepository
         await _connection.QueryAsync(_builder.Build());
     }
 
+    public async Task RenameTransactionType(string oldName, string newName)
+    {
+        var query = $@"EXEC sp_rename '{oldName}', '{newName}'";
+        await _connection.QueryAsync(query);
+    }
+
     public async Task CreateTransaction(string name, BankScheme scheme, Guid statementId, IDictionary<string, object> parameters)
     {
         var parametersTitleCase = new Dictionary<string, object>();
@@ -103,4 +109,6 @@ public class DynamicTransactionRepository : IDynamicTransactionRepository
 
         return (await _connection.QueryAsync(query, parameters)).ToList();
     }
+    
+    
 }

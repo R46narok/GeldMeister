@@ -1,15 +1,13 @@
-using System.Data;
 using BankStatements.Api.Security;
+using BankStatements.Api.Services;
+using BankStatements.Application.Common.Interfaces;
 using BankStatements.Application.Common.Repositories;
-using BankStatements.Domain.UserAggregate;
 using BankStatements.Infrastructure;
-using BankStatements.Infrastructure.Persistence;
 using GeldMeister.Common.Application.Extensions;
 using GeldMeister.Common.Application.MessageBrokers;
 using GeldMeister.Common.Application.Security;
 using GeldMeister.Common.Infrastructure.Extensions;
 using GeldMeister.Common.Infrastructure.MessageBrokers;
-using Microsoft.EntityFrameworkCore;
 using RabbitMQ.Client;
 
 var factory = new ConnectionFactory() {HostName = "localhost"};
@@ -24,6 +22,8 @@ builder.Services.AddInfrastructureServices(builder.Configuration);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.ConfigureSwagger();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 
 builder.Services.AddMediatorAndFluentValidation(new[] {typeof(IBankRepository).Assembly});
 builder.AddJwtAuthentication();
