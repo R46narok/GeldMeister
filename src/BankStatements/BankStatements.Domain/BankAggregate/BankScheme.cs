@@ -35,4 +35,9 @@ public class BankScheme : AuditableEntityBase
     {
         _properties.Add(property);
     }
+
+    public void ChangeFileType(FileType type)
+    {
+        FileType = type;
+    }
 }

@@ -17,7 +17,6 @@ public static class WebBuilderExtensions
         services.AddMediatR(config => config.RegisterServicesFromAssemblies(assemblies));
 
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
-        // services.AddTransient(typeof(IPipelineBehavior<,>), typeof(PerformanceBehavior<,>));
         services.AddValidatorsFromAssemblies(assemblies);
         services.AddAutoMapper(assemblies);
 
