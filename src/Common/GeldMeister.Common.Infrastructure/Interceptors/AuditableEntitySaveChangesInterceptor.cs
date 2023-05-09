@@ -26,14 +26,8 @@ public class AuditableEntitySaveChangesInterceptor : SaveChangesInterceptor
     public override async ValueTask<InterceptionResult<int>> SavingChangesAsync(DbContextEventData eventData, InterceptionResult<int> result, CancellationToken cancellationToken = default)
     {
         UpdateEntities(eventData.Context);
-        await PublishEvents();
 
         return await base.SavingChangesAsync(eventData, result, cancellationToken);
-    }
-
-    private async Task PublishEvents()
-    {
-        
     }
 
     private void UpdateEntities(DbContext? context)
