@@ -18,6 +18,6 @@ public class UpdateUserCommandValidator : AbstractValidator<UpdateUserCommand>
 
                 return false;
             })
-            .WithErrorCode("Not authorized");
+            .WithMessage("Not authorized");
     }
 }

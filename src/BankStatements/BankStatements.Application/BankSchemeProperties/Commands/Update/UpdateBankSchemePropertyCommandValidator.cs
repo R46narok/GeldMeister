@@ -9,6 +9,6 @@ public class UpdateBankSchemePropertyCommandValidator : AbstractValidator<Update
     {
         RuleFor(cmd => cmd.Id)
             .MustAsync(async (id, _) => await repository.GetByIdAsync(id) is not null)
-            .WithErrorCode("Bank scheme property does not exist in the database");
+            .WithMessage("Bank scheme property does not exist in the database");
     }
 }

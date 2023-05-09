@@ -20,6 +20,6 @@ public class ElevateUserCommandValidator : AbstractValidator<ElevateUserCommand>
                  return false;
              })
              .WithName("UserName")
-             .WithErrorCode("Not authorized");
+             .WithMessage("Not authorized");
      }
 }

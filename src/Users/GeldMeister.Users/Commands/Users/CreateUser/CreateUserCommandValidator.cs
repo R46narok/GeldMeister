@@ -11,9 +11,10 @@ public class CreateUserCommandValidator : AbstractValidator<CreateUserCommand>
     {
         RuleFor(u => u.UserName)
             .MustAsync(async (username, _) => await userManager.FindByNameAsync(username) is null)
-            .WithErrorCode("User already exists");
+            .WithMessage("User already exists");
 
         RuleFor(u => u.Email)
-            .EmailAddress();
+            .EmailAddress()
+            .WithMessage("Value should be a valid email address!");
     }
 }

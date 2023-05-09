@@ -9,6 +9,10 @@ public class CreateBankCommandValidator : AbstractValidator<CreateBankCommand>
     {
         RuleFor(cmd => cmd.Name)
             .MustAsync(async (name, _) => await repository.FindByNameAsync(name, false) is null)
-            .WithErrorCode("Bank names must be unique!");
+            .WithMessage("Bank names must be unique!");
+
+        RuleFor(cmd => cmd.Name)
+            .Must(name => name.Trim().Length > 0)
+            .WithMessage("Bank names cannot be empty!");
     }
 }

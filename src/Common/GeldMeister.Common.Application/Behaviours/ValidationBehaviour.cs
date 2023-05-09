@@ -31,7 +31,7 @@ public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TReques
         var errors = validationResult.Errors
             .ConvertAll(validationFailure => Error.Validation(
                 validationFailure.PropertyName,
-                validationFailure.ErrorCode));
+                validationFailure.ErrorMessage));
 
         return (dynamic)errors;
     }

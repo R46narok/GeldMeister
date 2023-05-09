@@ -9,6 +9,10 @@ public class UpdateBankCommandValidator : AbstractValidator<UpdateBankCommand>
     {
         RuleFor(cmd => cmd.Id)
             .MustAsync(async (id, _) => await repository.GetByIdAsync(id) is not null)
-            .WithErrorCode("Bank does not exist in the database");
+            .WithMessage("Bank does not exist in the database");
+
+        RuleFor(cmd => cmd.Name)
+            .MustAsync(async (name, _) => await repository.FindByNameAsync(name, false) is null)
+            .WithMessage("Bank names must be unique!");
     }
 }

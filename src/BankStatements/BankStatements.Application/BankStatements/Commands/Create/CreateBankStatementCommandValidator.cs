@@ -9,6 +9,6 @@ public class CreateBankStatementCommandValidator : AbstractValidator<CreateBankS
     {
         RuleFor(cmd => cmd.BankId)
             .MustAsync(async (id, _) => await repository.GetByIdAsync(id, false) is not null)
-            .WithErrorCode("Bank does not exist in the database");
+            .WithMessage("Bank does not exist in the database");
     }
 }

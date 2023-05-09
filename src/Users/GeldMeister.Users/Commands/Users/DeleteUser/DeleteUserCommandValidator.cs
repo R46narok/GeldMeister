@@ -20,6 +20,6 @@ public class DeleteUserCommandValidator : AbstractValidator<DeleteUserCommand>
                 return false;
             })
             .WithName("UserName")
-            .WithErrorCode("User does not exist in the database");
+            .WithMessage("User does not exist in the database");
     }
 }

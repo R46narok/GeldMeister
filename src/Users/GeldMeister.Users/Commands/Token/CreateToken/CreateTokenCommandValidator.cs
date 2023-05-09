@@ -17,6 +17,6 @@ public class CreateTokenCommandValidator : AbstractValidator<CreateTokenCommand>
                 return await userManager.CheckPasswordAsync(user, command.Password);
             })
             .WithName("Password")
-            .WithErrorCode("Password is not correct.");
+            .WithMessage("Password is not correct.");
     }
 }

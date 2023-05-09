@@ -9,6 +9,6 @@ public class DeleteBankCommandValidator : AbstractValidator<DeleteBankCommand>
     {
         RuleFor(cmd => cmd.Id)
             .MustAsync(async (id, _) => await repository.GetByIdAsync(id) is not null)
-            .WithErrorCode("Bank does not exist in the database");
+            .WithMessage("Bank does not exist in the database");
     }
 }

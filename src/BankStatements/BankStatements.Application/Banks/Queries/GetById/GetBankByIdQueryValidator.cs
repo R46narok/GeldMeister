@@ -10,6 +10,6 @@ public class GetBankByIdQueryValidator : AbstractValidator<GetBankByIdQuery>
     {
         RuleFor(cmd => cmd.Id)
             .MustAsync(async (name, _) => await repository.GetByIdAsync(name, false) is not null)
-            .WithErrorCode("Bank not found");
+            .WithMessage("Bank not found");
     }
 }

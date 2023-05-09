@@ -9,10 +9,10 @@ public class CreateBankSchemePropertyCommandValidator : AbstractValidator<Create
     {
         RuleFor(cmd => cmd.SchemeId)
             .MustAsync(async (id, _) => await repository.GetByIdAsync(id) is not null)
-            .WithErrorCode("Scheme not found");
+            .WithMessage("Scheme not found");
 
         RuleFor(cmd => cmd.Name)
             .NotEmpty()
-            .WithErrorCode("Name must not be empty");
+            .WithMessage("Name must not be empty");
     }
 }

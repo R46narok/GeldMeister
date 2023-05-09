@@ -9,6 +9,6 @@ public class CreateBankSchemeCommandValidator : AbstractValidator<CreateBankSche
     {
         RuleFor(cmd => cmd.BankName)
             .MustAsync(async (name, _) => await repository.FindByNameAsync(name, false) is not null)
-            .WithErrorCode("Bank not found");
+            .WithMessage("Bank not found");
     }
 }

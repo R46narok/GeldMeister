@@ -9,6 +9,6 @@ public class DeleteBankSchemeCommandValidator : AbstractValidator<DeleteBankSche
     {
         RuleFor(cmd => cmd.Id)
             .MustAsync(async (id, _) => await repository.GetByIdAsync(id, false) is not null)
-            .WithErrorCode("Bank scheme does not exist in the database");
+            .WithMessage("Bank scheme does not exist in the database");
     }
 }

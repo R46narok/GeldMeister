@@ -7,7 +7,7 @@ namespace BankStatements.Application.Banks.Commands.Update;
 
 public record UpdateBankCommandResponse(Guid Id);
 
-public record UpdateBankCommand(Guid Id, string? Name) : IRequest<ErrorOr<UpdateBankCommandResponse>>;
+public record UpdateBankCommand(Guid Id, string Name) : IRequest<ErrorOr<UpdateBankCommandResponse>>;
 
 public class UpdateBankCommandHandler : IRequestHandler<UpdateBankCommand, ErrorOr<UpdateBankCommandResponse>>
 {
