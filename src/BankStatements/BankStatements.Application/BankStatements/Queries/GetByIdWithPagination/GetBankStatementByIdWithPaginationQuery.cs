@@ -16,28 +16,25 @@ public class
 {
     private readonly IMapper _mapper;
     private readonly IBankStatementRepository _statementRepository;
-    private readonly IDynamicTransactionRepository _transactionRepository;
 
     public GetBankStatementByIdWithPaginationQueryHandler(
         IMapper mapper,
-        IBankStatementRepository statementRepository,
-        IDynamicTransactionRepository transactionRepository)
+        IBankStatementRepository statementRepository)
     {
         _mapper = mapper;
         _statementRepository = statementRepository;
-        _transactionRepository = transactionRepository;
     }
 
     public async Task<ErrorOr<BankStatementDto>> Handle(GetBankStatementByIdWithPaginationQuery request,
         CancellationToken cancellationToken)
     {
         var statement = await _statementRepository
-            .GetByIdAsync(request.Id, track: false, includeBank: true);
+            .GetByIdAsync(request.Id, track: false, includeBank: true, includeTransactions: true);
 
         var dto = _mapper.Map<BankStatementDto>(statement);
-        dto.Transactions = await _transactionRepository
-            .GetTransactionsByStatementIdWithPagination(statement!.Bank.Name, request.Id, request.PageIndex,
-                request.PageSize);
+        // dto.Transactions = await _transactionRepository
+        //     .GetTransactionsByStatementIdWithPagination(statement!.Bank.Name, request.Id, request.PageIndex,
+        //         request.PageSize);
 
         return dto;
     }

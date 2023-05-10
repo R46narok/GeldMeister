@@ -12,12 +12,10 @@ public record UpdateBankCommand(Guid Id, string Name) : IRequest<ErrorOr<UpdateB
 public class UpdateBankCommandHandler : IRequestHandler<UpdateBankCommand, ErrorOr<UpdateBankCommandResponse>>
 {
     private readonly IBankRepository _repository;
-    private readonly IDynamicTransactionRepository _transactionRepository;
 
-    public UpdateBankCommandHandler(IBankRepository repository, IDynamicTransactionRepository transactionRepository)
+    public UpdateBankCommandHandler(IBankRepository repository)
     {
         _repository = repository;
-        _transactionRepository = transactionRepository;
     }
     
     public async Task<ErrorOr<UpdateBankCommandResponse>> Handle(UpdateBankCommand request,
@@ -30,7 +28,6 @@ public class UpdateBankCommandHandler : IRequestHandler<UpdateBankCommand, Error
         bank.ChangeName(newName);
 
         await _repository.UpdateAsync(bank);
-        await _transactionRepository.RenameTransactionType(oldName, newName);
         
         return new UpdateBankCommandResponse(request.Id);
     }

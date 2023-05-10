@@ -5,10 +5,10 @@ using GeldMeister.Common.Application.Interfaces;
 
 namespace BankStatements.Infrastructure.Repositories;
 
-public class TransactionRepository 
-    : RepositoryBase<Transaction, Guid, BankStatementsDbContext>, ITransactionRepository
+public class TransactionFieldRepository 
+    : RepositoryBase<TransactionField, Guid, BankStatementsDbContext>, ITransactionFieldRepository
 {
-    public TransactionRepository(BankStatementsDbContext context) : base(context)
+    public TransactionFieldRepository(BankStatementsDbContext context) : base(context)
     {
     }
 }

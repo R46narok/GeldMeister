@@ -27,6 +27,8 @@ public class BankStatementsDbContext : DbContext
     public DbSet<BankScheme> BankSchemes => Set<BankScheme>();
     public DbSet<BankSchemeProperty> BankSchemeProperties => Set<BankSchemeProperty>();
     public DbSet<BankStatement> BankStatements => Set<BankStatement>();
+    public DbSet<Transaction> Transactions => Set<Transaction>();
+    public DbSet<TransactionField> TransactionFields => Set<TransactionField>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

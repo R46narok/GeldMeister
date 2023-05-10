@@ -44,14 +44,6 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-using (var scope = app.Services.CreateScope())
-{
-    var dbContext = scope.ServiceProvider.GetRequiredService<BankStatementsDbContext>();
-    dbContext.Database.EnsureCreated();
-}
-
-
-
 app.UseHttpsRedirection();
 app.UseJwtAuthentication();
 app.UseAuthorization();

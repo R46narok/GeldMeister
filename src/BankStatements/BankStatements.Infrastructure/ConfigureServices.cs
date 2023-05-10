@@ -3,6 +3,7 @@ using BankStatements.Application.Common.Dto;
 using BankStatements.Application.Common.Interfaces;
 using BankStatements.Application.Common.Repositories;
 using BankStatements.Infrastructure.Files;
+using BankStatements.Infrastructure.Memory;
 using BankStatements.Infrastructure.Persistence;
 using BankStatements.Infrastructure.Persistence.Builders;
 using BankStatements.Infrastructure.Repositories;
@@ -36,7 +37,11 @@ public static class ConfigureServices
         services.AddScoped<IBankSchemeRepository, BankSchemeRepository>();
         services.AddScoped<IBankSchemePropertyRepository, BankSchemePropertyRepository>();
         services.AddScoped<IBankStatementRepository, BankStatementRepository>();
-        services.AddScoped<IDynamicTransactionRepository, DynamicTransactionRepository>();
+        services.AddScoped<ITransactionRepository, TransactionRepository>();
+        services.AddScoped<ITransactionFieldRepository, TransactionFieldRepository>();
+
+        services.AddSingleton<IBinarySerializer, BinarySerializer>();
+        
         services.AddTransient<ITransactionQueryBuilder, MssqlTransactionQueryBuilder>();
         
         services.AddSingleton<IBankStatementParserFactory, BankStatementParserFactory>();

@@ -9,7 +9,7 @@ public class GetBankStatementByIdWithPaginationQueueValidator
     public GetBankStatementByIdWithPaginationQueueValidator(IBankStatementRepository repository)
     {
         RuleFor(q => q.Id)
-            .MustAsync(async (id, _) => await repository.GetByIdAsync(id, false, false) is not null)
+            .MustAsync(async (id, _) => await repository.GetByIdAsync(id, false, false, false) is not null)
             .WithMessage("The bank statement does not exist in the database");
 
         RuleFor(q => q.PageIndex)

@@ -8,7 +8,9 @@ public class BankSchemeProperty : AuditableEntityBase
     public BankScheme Scheme { get; private set; }
     public string Name { get; private set; }
     public DataType Type { get; private set; }
-    
+
+    private readonly HashSet<TransactionField> _transactionFields = new();
+    public IReadOnlySet<TransactionField> TransactionFields => _transactionFields;
 
     private BankSchemeProperty()
     {

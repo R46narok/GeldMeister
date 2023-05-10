@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BankStatements.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(BankStatementsDbContext))]
-    [Migration("20230507150611_InitialRmU")]
-    partial class InitialRmU
+    [Migration("20230510162701_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -118,6 +118,9 @@ namespace BankStatements.Infrastructure.Persistence.Migrations
                     b.Property<DateTime?>("LastModifiedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
                     b.HasIndex("BankId");
@@ -125,7 +128,7 @@ namespace BankStatements.Infrastructure.Persistence.Migrations
                     b.ToTable("BankStatements");
                 });
 
-            modelBuilder.Entity("BankStatements.Domain.UserAggregate.User", b =>
+            modelBuilder.Entity("BankStatements.Domain.BankAggregate.Transaction", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -134,16 +137,52 @@ namespace BankStatements.Infrastructure.Persistence.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("ExternalId")
+                    b.Property<DateTime?>("LastModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<byte[]>("Salt")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<Guid>("StatementId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StatementId");
+
+                    b.ToTable("Transactions");
+                });
+
+            modelBuilder.Entity("BankStatements.Domain.BankAggregate.TransactionField", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("LastModifiedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid>("PropertyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("TransactionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<byte[]>("Value")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.HasIndex("PropertyId");
+
+                    b.HasIndex("TransactionId");
+
+                    b.ToTable("TransactionFields");
                 });
 
             modelBuilder.Entity("BankStatements.Domain.BankAggregate.BankScheme", b =>
@@ -179,6 +218,36 @@ namespace BankStatements.Infrastructure.Persistence.Migrations
                     b.Navigation("Bank");
                 });
 
+            modelBuilder.Entity("BankStatements.Domain.BankAggregate.Transaction", b =>
+                {
+                    b.HasOne("BankStatements.Domain.BankAggregate.BankStatement", "Statement")
+                        .WithMany("Transactions")
+                        .HasForeignKey("StatementId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Statement");
+                });
+
+            modelBuilder.Entity("BankStatements.Domain.BankAggregate.TransactionField", b =>
+                {
+                    b.HasOne("BankStatements.Domain.BankAggregate.BankSchemeProperty", "Property")
+                        .WithMany("TransactionFields")
+                        .HasForeignKey("PropertyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BankStatements.Domain.BankAggregate.Transaction", "Transaction")
+                        .WithMany("TransactionFields")
+                        .HasForeignKey("TransactionId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Property");
+
+                    b.Navigation("Transaction");
+                });
+
             modelBuilder.Entity("BankStatements.Domain.BankAggregate.Bank", b =>
                 {
                     b.Navigation("Scheme");
@@ -187,6 +256,21 @@ namespace BankStatements.Infrastructure.Persistence.Migrations
             modelBuilder.Entity("BankStatements.Domain.BankAggregate.BankScheme", b =>
                 {
                     b.Navigation("Properties");
+                });
+
+            modelBuilder.Entity("BankStatements.Domain.BankAggregate.BankSchemeProperty", b =>
+                {
+                    b.Navigation("TransactionFields");
+                });
+
+            modelBuilder.Entity("BankStatements.Domain.BankAggregate.BankStatement", b =>
+                {
+                    b.Navigation("Transactions");
+                });
+
+            modelBuilder.Entity("BankStatements.Domain.BankAggregate.Transaction", b =>
+                {
+                    b.Navigation("TransactionFields");
                 });
 #pragma warning restore 612, 618
         }

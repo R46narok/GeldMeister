@@ -20,6 +20,7 @@ public class BankStatement : AuditableEntityBase
     {
         var statement = new BankStatement
         {
+            Id = Guid.NewGuid(),
             Bank = bank,
             UserId = userId
         };

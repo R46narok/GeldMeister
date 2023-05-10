@@ -14,7 +14,13 @@ public class BankStatementRepository :
     {
     }
 
-    public async Task<BankStatement?> GetByIdAsync(Guid id, bool track, bool includeBank)
+    public new async Task<BankStatement> CreateAsync(BankStatement statement)
+    {
+        var entry = await Context.BankStatements.AddAsync(statement);
+        return entry.Entity;
+    }
+
+    public async Task<BankStatement?> GetByIdAsync(Guid id, bool track, bool includeBank, bool includeTransactions)
     {
         var queryable = Context
             .Set<BankStatement>()
@@ -26,6 +32,12 @@ public class BankStatementRepository :
                 .Include(x => x.Bank)
                 .ThenInclude(x => x.Scheme)
                 .ThenInclude(x => x.Properties);
+
+        if (includeTransactions)
+            queryable = queryable
+                .Include(x => x.Transactions)
+                .ThenInclude(x => x.TransactionFields)
+                .ThenInclude(x => x.Property);
 
         return await queryable.FirstOrDefaultAsync(x => x.Id == id);
     }
