@@ -69,10 +69,6 @@ public class DynamicTransactionRepository : IDynamicTransactionRepository
         
         var properties = scheme.Properties;
         var queryBuilder = new StringBuilder();
-
-        // INSERT INTO [Postbank] 
-        //     ([Сметка],[Дата],[Основание],[СумаВъвВалутаНаСметката],[СумаВъвВалутаНаОперацията],[ОбмененКурс],[Тип],[ВидТранзакция],[Номер],[Вальор],[StatementId])
-        // VALUES ('1234-5678', '2023-04-01', N'Получена плащане', 1500, 1500, 1, N'Приход', N'Банков превод', 0001, '2023-04-02', 'c9e9cda2-ea41-4c31-8a31-08db5099dfea')
         
         queryBuilder.Append(@$"INSERT INTO [{name}] (");
         
