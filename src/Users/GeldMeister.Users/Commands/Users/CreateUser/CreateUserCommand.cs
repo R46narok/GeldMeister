@@ -2,6 +2,7 @@
 using AutoMapper;
 using ErrorOr;
 using GeldMeister.Common.Application.MessageBrokers;
+using GeldMeister.Common.Domain;
 using GeldMeister.Users.Data.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -54,9 +55,10 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Error
             
             await _userManager.AddClaimsAsync(user, new []
             {
-                new Claim(ClaimTypes.NameIdentifier, id),
+                new Claim(ClaimTypes.PrimarySid, id),
                 new Claim(ClaimTypes.Name, user.UserName),
-                new Claim(ClaimTypes.Role, "User")
+                new Claim(ClaimTypes.Role, "User"),
+                new Claim(GeldMeisterClaimType.ProfileTier, "Basic")
             });
 
             var @event = _mapper.Map<UserCreatedEvent>(user);
