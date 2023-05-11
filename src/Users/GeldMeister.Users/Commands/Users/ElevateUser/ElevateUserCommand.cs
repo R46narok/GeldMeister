@@ -3,7 +3,6 @@ using ErrorOr;
 using GeldMeister.Users.Data.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using V9.Application;
 
 namespace GeldMeister.Users.Commands.Users.ElevateUser;
 
@@ -31,7 +30,8 @@ public class ElevateUserCommandHandler : IRequestHandler<ElevateUserCommand, Err
     public async Task<ErrorOr<string>> Handle(ElevateUserCommand request, CancellationToken cancellationToken)
     {
         var user = await FindUserByNameOrId(request);
-        
+            
+        //TODO: Does not work (returns succeeded but the DB is not affected)
         await _userManager.ReplaceClaimAsync(user, 
             new Claim(ClaimTypes.Role, "User"),
             new Claim(ClaimTypes.Role, "Admin"));
